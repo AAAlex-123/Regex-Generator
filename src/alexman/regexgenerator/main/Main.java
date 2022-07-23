@@ -10,22 +10,22 @@ import java.util.regex.Pattern;
 public class Main {
     public static void main(String[] args) {
         Pattern url = Pattern.compile(
-                LINE_START
-                    .APPEND(CAPTURE(
-                            LITERAL("http")
-                                    .APPEND(OPTIONAL(LITERAL("s"), GREEDY))))
-                    .APPEND(LITERAL("://"))
-                    .APPEND(CAPTURE(
-                            OPTIONAL(NAMED(EXACTLY_N(LITERAL("w"), 3, GREEDY), "subdomain"), GREEDY)
-                                    .APPEND(LITERAL("."))
-                                    .APPEND(NAMED(
-                                            RANGE('a', 'm').SUBTRACTION(RANGE('c', 'f'))
-                                                    .APPEND(ZERO_OR_MORE(WORD, GREEDY)), "second"))
-                                    .APPEND(RAW("\\."))
-                                    .APPEND(NAMED(OR(LITERAL("com"), LITERAL("gr")), "top"))
-                                    .APPEND(OPTIONAL(LITERAL("/"), GREEDY))
-                                    .APPEND(OPTIONAL(NAMED(AT_LEAST_ONE(WORD, GREEDY), "subdir"), GREEDY))))
-                    .APPEND(LINE_END)
+                line_start
+                    .append(capture(
+                            literal("http")
+                                    .append(optional(literal("s"), greedy))))
+                    .append(literal("://"))
+                    .append(capture(
+                            optional(named(exactly_n(literal("w"), 3, greedy), "subdomain"), greedy)
+                                    .append(literal("."))
+                                    .append(named(
+                                            range('a', 'm').subtraction(range('c', 'f'))
+                                                    .append(zero_or_more(word, greedy)), "second"))
+                                    .append(raw("\\."))
+                                    .append(named(or(literal("com"), literal("gr")), "top"))
+                                    .append(optional(literal("/"), greedy))
+                                    .append(optional(named(at_least_one(word, greedy), "subdir"), greedy))))
+                    .append(line_end)
                     .toRegex());
 
         System.out.println("Pattern: " + url);
