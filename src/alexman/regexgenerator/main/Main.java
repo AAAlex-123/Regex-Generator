@@ -29,7 +29,11 @@ public class Main {
                     .append(line_end)
                     .toRegex());
 
-        System.out.println("Pattern: " + url);
+        final String expected = "^(https?)://((?<subdomain>w{3})?\\Q.\\E(?<second>[a-m&&[^c-f]][\\w]*)\\.(?<top>com|gr)/?(?<subdir>[\\w]+)?)$";
+        assert expected.equals(url.pattern())
+                : String.format("%nExpected: %s%nActual:   %s", expected, url.pattern());
+
+        // System.out.println("Pattern: " + url);
 
         match(url, "https://www.google.com/gmail");
         match(url, "http://www.medium.com");
