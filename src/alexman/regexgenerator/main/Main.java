@@ -1,14 +1,8 @@
 package alexman.regexgenerator.main;
 
-import static alexman.regexgenerator.CharacterClass.*;
-import static alexman.regexgenerator.BackReference.*;
-import static alexman.regexgenerator.Boundary.*;
-import static alexman.regexgenerator.Character.*;
-import static alexman.regexgenerator.Group.*;
-import static alexman.regexgenerator.LogicalOperator.*;
-import static alexman.regexgenerator.Quantifier.*;
-import static alexman.regexgenerator.Quantifier.Type.*;
-import static alexman.regexgenerator.Quotation.*;
+import static alexman.regexgenerator.Construct.*;
+import static alexman.regexgenerator.Construct.CharacterClass.*;
+import static alexman.regexgenerator.Construct.Type.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
