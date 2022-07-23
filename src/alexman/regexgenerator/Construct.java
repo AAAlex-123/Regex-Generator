@@ -8,8 +8,8 @@ public interface Construct {
 
     // CHARACTERS
 
-    static Construct STRING(String string) {
-        return () -> string;
+    static Construct RAW(String rawString) {
+        return () -> rawString;
     }
 
     Construct BACKSLASH = () -> "\\\\";
@@ -132,11 +132,9 @@ public interface Construct {
 
     // QUOTES
 
-    Construct QUOTE = () -> "\\";
-
-    Construct QUOTE_START = () -> "\\Q";
-
-    Construct QUOTE_END = () -> "\\E";
+    static Construct LITERAL(String string) {
+        return () -> Pattern.quote(string);
+    }
 
     // GROUPS
 

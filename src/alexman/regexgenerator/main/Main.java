@@ -12,20 +12,18 @@ public class Main {
         Pattern url = Pattern.compile(
                 LINE_START
                     .APPEND(CAPTURE(
-                            STRING("http")
-                                    .APPEND(OPTIONAL(STRING("s"), GREEDY))))
-                    .APPEND(STRING("://"))
+                            LITERAL("http")
+                                    .APPEND(OPTIONAL(LITERAL("s"), GREEDY))))
+                    .APPEND(LITERAL("://"))
                     .APPEND(CAPTURE(
-                            OPTIONAL(NAMED(EXACTLY_N(STRING("w"), 3, GREEDY), "subdomain"), GREEDY)
-                                    .APPEND(QUOTE)
-                                    .APPEND(STRING("."))
+                            OPTIONAL(NAMED(EXACTLY_N(LITERAL("w"), 3, GREEDY), "subdomain"), GREEDY)
+                                    .APPEND(LITERAL("."))
                                     .APPEND(NAMED(
                                             RANGE('a', 'm').SUBTRACTION(RANGE('c', 'f'))
                                                     .APPEND(ZERO_OR_MORE(WORD, GREEDY)), "second"))
-                                    .APPEND(QUOTE)
-                                    .APPEND(STRING("."))
-                                    .APPEND(NAMED(OR(STRING("com"), STRING("gr")), "top"))
-                                    .APPEND(OPTIONAL(STRING("/"), GREEDY))
+                                    .APPEND(RAW("\\."))
+                                    .APPEND(NAMED(OR(LITERAL("com"), LITERAL("gr")), "top"))
+                                    .APPEND(OPTIONAL(LITERAL("/"), GREEDY))
                                     .APPEND(OPTIONAL(NAMED(AT_LEAST_ONE(WORD, GREEDY), "subdir"), GREEDY))))
                     .APPEND(LINE_END)
                     .toRegex());
