@@ -2,29 +2,30 @@ package alexman.regexgenerator.main;
 
 import static alexman.regexgenerator.Construct.*;
 import static alexman.regexgenerator.Construct.CharacterClass.*;
-import static alexman.regexgenerator.Construct.Type.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Main {
+
     public static void main(String[] args) {
         Pattern url = Pattern.compile(
                 line_start
                     .append(capture(
-                            literal("http")
-                                    .append(optional(literal("s"), greedy))))
-                    .append(literal("://"))
+                            raw("http")
+                                    .append(optional(raw("s")))))
+                    .append(raw("://"))
                     .append(capture(
-                            optional(named(exactly_n(literal("w"), 3, greedy), "subdomain"), greedy)
+                            optional(named_group("subdomain", exactly_n(3, raw("w"))))
                                     .append(literal("."))
-                                    .append(named(
-                                            range('a', 'm').subtraction(range('c', 'f'))
-                                                    .append(zero_or_more(word, greedy)), "second"))
+                                    .append(named_group("second",
+                                            range('a', 'm').subtract(range('c', 'f'))
+                                                       .append(zero_or_more(word))))
                                     .append(raw("\\."))
-                                    .append(named(or(literal("com"), literal("gr")), "top"))
-                                    .append(optional(literal("/"), greedy))
-                                    .append(optional(named(at_least_one(word, greedy), "subdir"), greedy))))
+                                    .append(named_group("top", raw("com").or(raw("gr"))))
+                                    .append(optional(raw("/")))
+                                    .append(optional(
+                                            named_group("subdir", at_least_one(word))))))
                     .append(line_end)
                     .toRegex());
 

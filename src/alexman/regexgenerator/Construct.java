@@ -82,6 +82,30 @@ public interface Construct {
         }
     }
 
+    static Construct optional(Construct construct) {
+        return optional(construct, Type.greedy);
+    }
+
+    static Construct zero_or_more(Construct construct) {
+        return zero_or_more(construct, Type.greedy);
+    }
+
+    static Construct at_least_one(Construct construct) {
+        return at_least_one(construct, Type.greedy);
+    }
+
+    static Construct exactly_n(int n, Construct construct) {
+        return exactly_n(n, Type.greedy, construct);
+    }
+
+    static Construct at_least_n(int n, Construct construct) {
+        return at_least_n(n, Type.greedy, construct);
+    }
+
+    static Construct between_n_and_m(int n, int m, Construct construct) {
+        return between_n_and_m(n, m, Type.greedy, construct);
+    }
+
     static Construct optional(Construct construct, Type type) {
         return () -> String.format("%s?%s", construct.toRegex(), type.s);
     }
@@ -94,15 +118,15 @@ public interface Construct {
         return () -> String.format("%s+%s", construct.toRegex(), type.s);
     }
 
-    static Construct exactly_n(Construct construct, int n, Type type) {
+    static Construct exactly_n(int n, Type type, Construct construct) {
         return () -> String.format("%s{%d}%s", construct.toRegex(), n, type.s);
     }
 
-    static Construct at_least_n(Construct construct, int n, Type type) {
+    static Construct at_least_n(int n, Type type, Construct construct) {
         return () -> String.format("%s{%d,}%s", construct.toRegex(), n, type.s);
     }
 
-    static Construct between_n_and_m(Construct construct, int n, int m, Type type) {
+    static Construct between_n_and_m(int n, int m, Type type, Construct construct) {
         return () -> String.format("%s{%d,%d}%s", construct.toRegex(), n, m, type.s);
     }
 
@@ -112,8 +136,8 @@ public interface Construct {
         return () -> this.toRegex() + other.toRegex();
     }
 
-    static Construct or(Construct first, Construct second) {
-        return () -> first.toRegex() + "|" + second.toRegex();
+    default Construct or(Construct other) {
+        return () -> this.toRegex() + "|" + other.toRegex();
     }
 
     static Construct capture(Construct c) {
@@ -138,7 +162,7 @@ public interface Construct {
 
     // GROUPS
 
-    static Construct named(Construct c, String name) {
+    static Construct named_group(String name, Construct c) {
         return () -> String.format("(?<%s>%s)", name, c.toRegex());
     }
 
@@ -185,7 +209,7 @@ public interface Construct {
             // return new CharacterClass("[" + chars + "]");
         }
 
-        public static CharacterClass negation(CharacterClass other) {
+        public static CharacterClass negate(CharacterClass other) {
             return of("^" + other.chars);
         }
 
@@ -205,12 +229,12 @@ public interface Construct {
             return of(this.chars + other.chars);
         }
 
-        public CharacterClass intersection(CharacterClass other) {
+        public CharacterClass intersect(CharacterClass other) {
             return of(this.chars + "&&" + other.toRegex());
         }
 
-        public CharacterClass subtraction(CharacterClass other) {
-            return of(this.chars + "&&" + negation(other).toRegex());
+        public CharacterClass subtract(CharacterClass other) {
+            return of(this.chars + "&&" + negate(other).toRegex());
         }
 
         public static Construct any = () -> ".";
